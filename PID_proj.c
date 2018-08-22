@@ -12,6 +12,14 @@
 #include <stdlib.h>
 #include "pid/pid.h"
 
+#define myKp 1
+#define myKi 1
+#define myKd 1
+#define myTs 1
+#define myMin 1
+#define myMax 1
+
+
 int main(void) {
 
 	/*
@@ -26,8 +34,8 @@ int main(void) {
 	 * -Set actuator limits
 	 */
 	PID_Init(&MyPIDController);
-	PID_SetGains(&MyPIDController,100,10,1, 1);
-	PID_SetActuatorLimits(&MyPIDController, 0, 50);
+	PID_SetGains(&MyPIDController, myKp, myKi, myKd, myTs);
+	PID_SetActuatorLimits(&MyPIDController, myMin, myMax);
 	/*
 	 *
 	 */
