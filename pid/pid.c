@@ -51,31 +51,29 @@ struct s_PIDOutput PID_Calculate(struct s_PID *s) {
 
 	s->Saturation_Test = (s->Kp)*(s->Error) + (s->Ki)*(s->Integral) + (s->Kd)*(s->Derivative); 	//Saturation_Test = Kp * Error + Ki*Integral
 
-	if( ( (s->Saturation_Test) <= s->Actuator_Min ) ||  ((s->Saturation_Test) >= s->Actuator_Max ) ) //If Sat_Test < Min OR Sat_test > Max
-	{
+	if( ( (s->Saturation_Test) <= s->Actuator_Min ) ||  ((s->Saturation_Test) >= s->Actuator_Max ) ) { //If Sat_Test < Min OR Sat_test > Max 
 		//Anti-windup mechanism
 		s->Integral = s->Integral - (s->Error) * (s->Ts); //Integral = Integral - Error*Ts;
+		s->Output = s->Saturation_Test - (s->Ki)*(s->Integral);
 	}
-
+	else {
 	//Actually do the PI
 	//Output = Kp*error + Ki*integral
 	s->Output = s->Saturation_Test;
-
+	}
 	//Check for actuator saturation
-	if( (s->Output) <= (s->Actuator_Min) )
-	{
+	if( (s->Output) <= (s->Actuator_Min) ) {
 		(s->Output) = (s->Actuator_Min); //Apply saturation limit
 		s->e_SaturatedStatus = PID_SaturatedMin; //Set Saturation Flag
 	}
-	else if ( (s->Output) >= (s->Actuator_Max) )
-	{
+	else if ( (s->Output) >= (s->Actuator_Max) ) {
 		(s->Output) = (s->Actuator_Max); //Apply saturation limit
 		s->e_SaturatedStatus = PID_SaturatedMax; //Set Saturation Flag
 	}
-	else
-	{
+	else {
 		s->e_SaturatedStatus = PID_NotSaturated; //Set Saturation Flag
 	}
+	
 	struct s_PIDOutput s_Output = {
 			s->Output,
 			s->e_SaturatedStatus,
@@ -93,10 +91,10 @@ struct s_PIDOutput PI_Calculate(struct s_PID *s) {
 
 	s->Saturation_Test = (s->Kp)*(s->Error) + (s->Ki)*(s->Integral); 	//Saturation_Test = Kp * Error + Ki*Integral
 
-	if( ( (s->Saturation_Test) <= s->Actuator_Min ) ||  ((s->Saturation_Test) >= s->Actuator_Max ) ) //If Sat_Test < Min OR Sat_test > Max
-	{
+	if( ( (s->Saturation_Test) <= s->Actuator_Min ) ||  ((s->Saturation_Test) >= s->Actuator_Max ) ) } //If Sat_Test < Min OR Sat_test > Max
 		//Anti-windup mechanism
 		s->Integral = s->Integral - (s->Error) * (s->Ts); //Integral = Integral - Error*Ts;
+		s->Output = s->Saturation_Test - (s->Ki)*(s->Integral);
 	}
 
 	//Actually do the PI
@@ -104,20 +102,18 @@ struct s_PIDOutput PI_Calculate(struct s_PID *s) {
 	s->Output = s->Saturation_Test;
 
 	//Check for actuator saturation
-	if( (s->Output) <= (s->Actuator_Min) )
-	{
+	if( (s->Output) <= (s->Actuator_Min) ) {
 		(s->Output) = (s->Actuator_Min); //Apply saturation limit
 		s->e_SaturatedStatus = PID_SaturatedMin; //Set Saturation Flag
 	}
-	else if ( (s->Output) >= (s->Actuator_Max) )
-	{
+	else if ( (s->Output) >= (s->Actuator_Max) ) {
 		(s->Output) = (s->Actuator_Max); //Apply saturation limit
 		s->e_SaturatedStatus = PID_SaturatedMax; //Set Saturation Flag
 	}
-	else
-	{
+	else {
 		s->e_SaturatedStatus = PID_NotSaturated; //Set Saturation Flag
 	}
+
 	struct s_PIDOutput s_Output = {
 			s->Output,
 			s->e_SaturatedStatus,
