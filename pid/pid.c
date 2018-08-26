@@ -28,6 +28,10 @@ void PID_Init(struct s_PID *s) {
 	s->e_SaturatedStatus = PID_NotSaturated;
 }
 
+void PID_SetReference(struct s_PID *s, ControlTypeDef ref) {
+	s->Reference=ref;
+}
+
 void PID_SetGains(struct s_PID *s, ControlTypeDef Kp, ControlTypeDef Ki, ControlTypeDef Kd, ControlTypeDef Ts) {
 	s->Kp=Kp;
 	s->Ki=Ki;
@@ -91,7 +95,7 @@ struct s_PIDOutput PI_Calculate(struct s_PID *s) {
 
 	s->Saturation_Test = (s->Kp)*(s->Error) + (s->Ki)*(s->Integral); 	//Saturation_Test = Kp * Error + Ki*Integral
 
-	if( ( (s->Saturation_Test) <= s->Actuator_Min ) ||  ((s->Saturation_Test) >= s->Actuator_Max ) ) } //If Sat_Test < Min OR Sat_test > Max
+	if( ( (s->Saturation_Test) <= s->Actuator_Min ) ||  ((s->Saturation_Test) >= s->Actuator_Max ) ) { //If Sat_Test < Min OR Sat_test > Max
 		//Anti-windup mechanism
 		s->Integral = s->Integral - (s->Error) * (s->Ts); //Integral = Integral - Error*Ts;
 		s->Output = s->Saturation_Test - (s->Ki)*(s->Integral);
