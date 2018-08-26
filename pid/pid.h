@@ -43,9 +43,10 @@ struct s_PIDOutput {
 
 void PID_Reset(struct s_PID *s);
 void PID_Init(struct s_PID *s);
+void PID_SetReference(struct s_PID *s, ControlTypeDef ref);
 void PID_SetGains(struct s_PID *s, ControlTypeDef Kp, ControlTypeDef Ki, ControlTypeDef Kd, ControlTypeDef Ts);
 void PID_SetActuatorLimits(struct s_PID *s, ControlTypeDef Min, ControlTypeDef Max);
 struct s_PIDOutput PID_Calculate(struct s_PID *s);
-struct s_PIDOutput PI_Calculate(struct s_PID *s)
+struct s_PIDOutput PI_Calculate(struct s_PID *s);
 
 #endif /* PID_H_ */
