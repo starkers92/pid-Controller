@@ -1,4 +1,12 @@
 /*
+ * PID_proj.c
+ *
+ *  Created on: 27 Aug. 2018
+ *      Author: Dave
+ */
+
+
+/*
  ============================================================================
  Name        : PID_proj.c
  Author      : Chris
@@ -18,6 +26,7 @@
 #define myTs 1
 #define myMin 1
 #define myMax 1
+#define myRef 1
 
 
 int main(void) {
@@ -35,15 +44,22 @@ int main(void) {
 	 */
 	PID_Init(&MyPIDController);
 	PID_SetGains(&MyPIDController, myKp, myKi, myKd, myTs);
+	PID_SetReference(&MyPIDController, myRef);
 	PID_SetActuatorLimits(&MyPIDController, myMin, myMax);
 	/*
 	 *
 	 */
 	while(1) {
-		//Wait for timer flag
+		//Wait for timer flag..
+
+		//Calculate PID
 		MyPIDControllerOutput = PID_Calculate(&MyPIDController);
-		// Check MyPIDControllerOutput.e_OutputSaturatedStatus for saturation
-		// Send MyPIDControllerOutput.Output to to actuator function..
+
+		if(MyPIDControllerOutput.e_OutputSaturatedStatus != PID_NotSaturated) {
+			//code to run on saturation
+		}
+
+		//Send MyPIDControllerOutput.Output to actuator function..
 	}
 	return EXIT_SUCCESS;
 }
